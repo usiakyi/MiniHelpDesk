@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:MiniHelpDesk.Models"
+             x:Class="MiniHelpDesk.Views.MainPage"
+             Title="Mini HelpDesk"
+             BackgroundColor="#F3F6FB">
+    <ScrollView>
+        <Grid Padding="28" ColumnDefinitions="360,*" ColumnSpacing="24"
+              RowDefinitions="Auto,*">
+            <VerticalStackLayout Grid.ColumnSpan="2" Spacing="5" Margin="0,0,0,18">
+                <Label Text="Mini HelpDesk" FontSize="30" FontAttributes="Bold" TextColor="#172033"/>
+                <Label Text="Panel obsługi zgłoszeń technicznych" FontSize="14" TextColor="#64748B"/>
+            </VerticalStackLayout>
+
+            <Border Grid.Row="1" Grid.Column="0" Background="White" Stroke="#E2E8F0"
+                    StrokeThickness="1" Padding="20" StrokeShape="RoundRectangle 14">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Nowe zgłoszenie" FontSize="20" FontAttributes="Bold" TextColor="#172033"/>
+                    <Label Text="Nazwa" FontAttributes="Bold"/>
+                    <Entry Placeholder="Np. Problem z drukarką" Text="{Binding Name}" />
+                    <Label Text="{Binding NameError}" TextColor="#DC2626" FontSize="12"/>
+                    <Label Text="Opis" FontAttributes="Bold"/>
+                    <Editor Placeholder="Opisz problem (minimum 10 znaków)" HeightRequest="110"
+                            AutoSize="TextChanges" Text="{Binding Description}"/>
+                    <Label Text="{Binding DescriptionError}" TextColor="#DC2626" FontSize="12"/>
+                    <Label Text="Priorytet" FontAttributes="Bold"/>
+                    <Picker Title="Wybierz priorytet" ItemsSource="{Binding Priorities}"
+                            SelectedItem="{Binding SelectedPriority}"/>
+                    <Label Text="{Binding PriorityError}" TextColor="#DC2626" FontSize="12"/>
+                    <Button Text="Dodaj zgłoszenie" Command="{Binding AddCommand}"
+                            BackgroundColor="#2563EB" TextColor="White" CornerRadius="8"/>
+                    <Label Text="{Binding Message}" TextColor="#2563EB" FontSize="13"/>
+                    <Button Text="Uruchom testy MSTest" Command="{Binding RunTestsCommand}" BackgroundColor="#475569" TextColor="White"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="14">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Border Background="White" Stroke="#E2E8F0" Padding="16" StrokeShape="RoundRectangle 12">
+                        <VerticalStackLayout>
+                            <Label Text="Wszystkie zgłoszenia" TextColor="#64748B"/>
+                            <Label Text="{Binding TotalCount}" FontSize="28" FontAttributes="Bold" TextColor="#172033"/>
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Background="White" Stroke="#E2E8F0" Padding="16" StrokeShape="RoundRectangle 12">
+                        <VerticalStackLayout>
+                            <Label Text="Niezakończone" TextColor="#64748B"/>
+                            <Label Text="{Binding OpenCount}" FontSize="28" FontAttributes="Bold" TextColor="#2563EB"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Label Text="Lista zgłoszeń" FontSize="20" FontAttributes="Bold" TextColor="#172033"/>
+                <CollectionView ItemsSource="{Binding Tickets}" SelectionMode="Single"
+                                SelectedItem="{Binding SelectedTicket}">
+                    <CollectionView.EmptyView>
+                        <Border Background="White" Padding="24" Stroke="#E2E8F0" StrokeShape="RoundRectangle 12">
+                            <Label Text="Brak zgłoszeń. Dodaj pierwsze zgłoszenie w formularzu."
+                                   TextColor="#64748B" HorizontalTextAlignment="Center"/>
+                        </Border>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Ticket">
+                            <Border Background="White" Stroke="#E2E8F0" StrokeThickness="1"
+                                    Padding="16" Margin="0,0,0,10" StrokeShape="RoundRectangle 12">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                                    <Label Text="{Binding Name}" FontSize="17" FontAttributes="Bold" TextColor="#172033"/>
+                                    <Label Grid.Column="1" Text="{Binding Priority}" TextColor="#2563EB" FontAttributes="Bold"/>
+                                    <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Description}"
+                                           TextColor="#475569" LineBreakMode="WordWrap" Margin="0,5,0,5"/>
+                                    <Label Grid.Row="2" Text="{Binding Status}" TextColor="#0F766E" FontAttributes="Bold"/>
+                                    <Label Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding Id, StringFormat='ID: {0}'}"
+                                           FontSize="10" TextColor="#94A3B8"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Border Background="White" Stroke="#E2E8F0" Padding="16" StrokeShape="RoundRectangle 12">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Operacje na zaznaczonym zgłoszeniu" FontAttributes="Bold" FontSize="16"/>
+                        <Label Text="Nowy status"/>
+                        <Picker ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedStatus}"/>
+                        <Button Text="Zmień status" Command="{Binding ChangeStatusCommand}"
+                                BackgroundColor="#0F766E" TextColor="White"/>
+                        <Button Text="Usuń zgłoszenie" Command="{Binding DeleteCommand}"
+                                BackgroundColor="#DC2626" TextColor="White"/>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>
